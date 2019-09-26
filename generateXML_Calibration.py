@@ -1,3 +1,8 @@
+#############################################
+# Developer: Polyneikis Tzanis
+# Date 26/09/2019 : initial commit
+#############################################
+
 def templateL1DDC_ADDC():
 	return """   
 	 <SCA address="simple-netio://direct/pcatlnswfelix02.cern.ch/1234%s/1235%s/%s" name="%s" idConstraint="dont_care" supervised="true" recoveryActionScaStayedPowered="do_nothing" recoveryActionScaWasRepowered="reset_and_configure" managementFromAddressSpace="only_if_kaputt" >
