@@ -28,7 +28,6 @@ linesOfFile=file.readlines()
 boards=[]
 elinks=[]
 for line in linesOfFile:
-   # print(line.split()[0],line.split()[1])
    boards.append(line.split()[0])
    elinks.append(line.split()[1])
 file.close()
