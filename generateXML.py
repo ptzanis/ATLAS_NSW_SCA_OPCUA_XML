@@ -1,37 +1,150 @@
-#############################################
-# Developer: Polyneikis Tzanis
+###################################################################################
+# Developer: Polyneikis Tzanis (polyneikis.tzanis@cern.ch)
 # Date 26/09/2019 : initial commit
-#############################################
+# Date 22/10/2019 : Merge Normal/Calibration/Simulation
+#                   Input arguments for boards selection
+#                   Input arguments for mode selection
+###################################################################################
 
-def templateL1DDC_ADDC():
+# ----------------------  SCA templates -------------------------------------------------------
+
+def templateL1DDC_ADDC_Uncalibrated():
 	return """   
-	 <SCA address="simple-netio://direct/pcatlnswfelix02.cern.ch/1234%s/1235%s/%s" name="%s" idConstraint="dont_care" supervised="true" recoveryActionScaStayedPowered="do_nothing" recoveryActionScaWasRepowered="reset_and_configure" managementFromAddressSpace="only_if_kaputt" >
+	 <SCA address="simple-netio://direct/%s.cern.ch/1234%s/1235%s/%s" name="%s" idConstraint="dont_care" supervised="true" recoveryActionScaStayedPowered="do_nothing" recoveryActionScaWasRepowered="reset_and_configure" managementFromAddressSpace="only_if_kaputt" >
 	<CalculatedVariable name="constant_1V5" value="0.0" />
 	<CalculatedVariable name="constant_2V5" value="0.0" />
         &SCA_%s;
     </SCA>
 	"""
-def templateMMFE8():
+def templateMMFE8_Uncalibrated():
 	return """   
-	 <SCA address="simple-netio://direct/pcatlnswfelix02.cern.ch/1234%s/1235%s/%s" name="%s" idConstraint="dont_care" supervised="true" recoveryActionScaStayedPowered="do_nothing" recoveryActionScaWasRepowered="reset_and_configure" managementFromAddressSpace="only_if_kaputt" >
+	 <SCA address="simple-netio://direct/%s.cern.ch/1234%s/1235%s/%s" name="%s" idConstraint="dont_care" supervised="true" recoveryActionScaStayedPowered="do_nothing" recoveryActionScaWasRepowered="reset_and_configure" managementFromAddressSpace="only_if_kaputt" >
 	<CalculatedVariable name="constant_1V2D" value="0.0" />
 	<CalculatedVariable name="constant_1V3" value="0.0" />
 	<CalculatedVariable name="constant_1V3E" value="0.0" />
         &SCA_%s;
     </SCA>
 	"""
+def templateL1DDC_ADDC_Calibrated():
+	return """   
+	 <SCA address="simple-netio://direct/%s.cern.ch/1234%s/1235%s/%s" name="%s" idConstraint="dont_care" supervised="true" recoveryActionScaStayedPowered="do_nothing" recoveryActionScaWasRepowered="reset_and_configure" managementFromAddressSpace="only_if_kaputt" >
+	<CalculatedVariable name="constant_1V5" value="%s" />
+	<CalculatedVariable name="constant_2V5" value="%s" />
+        &SCA_%s;
+    </SCA>
+	"""
+def templateMMFE8_Calibrated():
+	return """   
+	 <SCA address="simple-netio://direct/%s.cern.ch/1234%s/1235%s/%s" name="%s" idConstraint="dont_care" supervised="true" recoveryActionScaStayedPowered="do_nothing" recoveryActionScaWasRepowered="reset_and_configure" managementFromAddressSpace="only_if_kaputt" >
+	<CalculatedVariable name="constant_1V2D" value="%s" />
+	<CalculatedVariable name="constant_1V3" value="%s" />
+	<CalculatedVariable name="constant_1V3E" value="%s" />
+        &SCA_%s;
+    </SCA>
+	"""
+def templateL1DDC_ADDC_Simulation():
+	return """   
+	 <SCA address="sca-simulator://%s" name="%s" idConstraint="dont_care" supervised="true" recoveryActionScaStayedPowered="do_nothing" recoveryActionScaWasRepowered="reset_and_configure" managementFromAddressSpace="only_if_kaputt" >
+	<CalculatedVariable name="constant_1V5" value="0.0" />
+	<CalculatedVariable name="constant_2V5" value="0.0" />
+        &SCA_%s;
+    </SCA>
+	"""
+def templateMMFE8_Simulation():
+	return """   
+	 <SCA address="sca-simulator://%s" name="%s" idConstraint="dont_care" supervised="true" recoveryActionScaStayedPowered="do_nothing" recoveryActionScaWasRepowered="reset_and_configure" managementFromAddressSpace="only_if_kaputt" >
+	<CalculatedVariable name="constant_1V2D" value="0.0" />
+	<CalculatedVariable name="constant_1V3" value="0.0" />
+	<CalculatedVariable name="constant_1V3E" value="0.0" />
+        &SCA_%s;
+    </SCA>
+	"""
+# ----------------------  Function arguments -------------------------------------------------------
 
-fileXML=open("small_sector_12_NEW.xml","w+")
-file = open('boards_elink.txt','r')
-linesOfFile=file.readlines()
+import argparse
+import re
+
+parser = argparse.ArgumentParser(description='Production of XML for SCA OPC UA Server')
+
+parser.add_argument("-mode", "--mode", type=str, default="N",
+   help="Choose mode: [U]ncalibration/[C]alibration/[S]imulation")
+parser.add_argument("-m", "--MMFE8", action='store_true',
+   help="Enable MMFE8")
+parser.add_argument("-l", "--L1DDC", action='store_true',
+   help="Enable L1DDC")
+parser.add_argument("-a", "--ADDC", action='store_true',
+   help="Enable ADDC")
+args = vars(parser.parse_args())
+
+# ----------------------  Selection Sector / FELIX machine -------------------------------------------------------
+
+# Select Sector 
+sector='A12'   
+# Select FELIX computer  
+felixComputer='pcatlnswfelix02'
+felixDeviceId="0"
+
+
+
+
+# ----------------------  Main Code -------------------------------------------------------
+
+if(args['mode']=="U"):
+   fileXML=open('sector_'+sector+'_Uncalibration_NEW.xml',"w+")
+if(args['mode']=="C"):
+    fileXML=open('sector_'+sector+'_Calibration_NEW.xml',"w+")
+    feastL1DDCFile = open('L1DDC_FEAST_CALIBRATION.txt','r')
+    feastMMFE8File = open('MMFE8_FEAST_CALIBRATION.txt','r')
+    feastADDCFile = open('ADDC_FEAST_CALIBRATION.txt','r')
+		
+    linesOffeastL1DDCFile=feastL1DDCFile.readlines()
+    linesOffeastMMFE8File=feastMMFE8File.readlines()
+    linesOffeastADDCFile=feastADDCFile.readlines()
+    	
+    boardL1DDC=[]
+    constant_1V5_L1DDC=[]
+    constant_2V5_L1DDC=[]
+    
+    boardADDC=[]
+    constant_1V5_ADDC=[]
+    constant_2V5_ADDC=[]
+    
+    boardMMFE8=[]
+    constant_1V2D=[]
+    constant_1V3=[]
+    constant_1V3E=[]
+    	
+    for line in linesOffeastL1DDCFile:
+       boardL1DDC.append(line.split()[0])
+       constant_1V5_L1DDC.append(line.split()[1])
+       constant_2V5_L1DDC.append(line.split()[2])   
+    feastL1DDCFile.close()
+    
+    for line in linesOffeastMMFE8File:
+       boardMMFE8.append(line.split()[0])
+       constant_1V2D.append(line.split()[1])
+       constant_1V3.append(line.split()[2])   
+       constant_1V3E.append(line.split()[3])   
+    feastMMFE8File.close()
+    
+    for line in linesOffeastADDCFile:
+       boardADDC.append(line.split()[0])
+       constant_1V5_ADDC.append(line.split()[1])
+       constant_2V5_ADDC.append(line.split()[2])   
+    feastADDCFile.close()
+if(args['mode']=="S"):
+   fileXML=open('sector_'+sector+'_Simulation_NEW.xml',"w+")   
+
+
+elinksFile = open('boards_elink.txt','r')
+linesOfElinksFile=elinksFile.readlines()
 
 boards=[]
 elinks=[]
-for line in linesOfFile:
+for line in linesOfElinksFile:
    boards.append(line.split()[0])
    elinks.append(line.split()[1])
-file.close()
-
+elinksFile.close()
 
 fileXML.write("""<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE configuration [
@@ -57,23 +170,40 @@ fileXML.write("""<?xml version="1.0" encoding="UTF-8"?>
     <CalculatedVariableGenericFormula name="rssiCurrentmA" formula="2.5-$thisObjectAddress.value"/>
     """)
 
-import re
-felix="0"
+
 mmmfe8Counter=addcCounter=l1ddcCounter=0
+counter=0
 for board,elink in zip(boards,elinks):
-	if(re.compile("83f").match(elink)):
-		felix="1"
-	if(re.compile("L1DDC").match(board)):
-		fileXML.write(templateL1DDC_ADDC() % (felix,felix,elink,board,"L1DDC"))
-		l1ddcCounter=l1ddcCounter+1	
-	if(re.compile("ADDC").match(board)):
-		fileXML.write(templateL1DDC_ADDC() % (felix,felix,elink,board,"ADDC"))
-		addcCounter=addcCounter+1	
-	if(re.compile("MMFE8").match(board)):
-		fileXML.write(templateMMFE8() % (felix,felix,elink,board,"MMFE8"))
-		mmmfe8Counter=mmmfe8Counter+1
-
-
+    counter=counter+1
+    if(re.compile("83f").match(elink)):
+	  felixDeviceId="1"
+    if(args['L1DDC']==True):
+	  if(re.compile("L1DDC").match(board)):
+	    l1ddcCounter=l1ddcCounter+1	
+	    if(args['mode']=="U"):
+	      fileXML.write(templateL1DDC_ADDC_Uncalibrated() % (felixComputer,felixDeviceId,felixDeviceId,elink,board,"L1DDC"))
+	    if(args['mode']=="C"):
+	      fileXML.write(templateL1DDC_ADDC_Calibrated() % (felixComputer,felixDeviceId,felixDeviceId,elink,board,constant_1V5_L1DDC[boardL1DDC.index(board)],constant_2V5_L1DDC[boardL1DDC.index(board)],"L1DDC"))
+	    if(args['mode']=="S"):
+	      fileXML.write(templateL1DDC_ADDC_Simulation() % (counter,board,"L1DDC"))
+    if(args['ADDC']==True):
+	  if(re.compile("ADDC").match(board)):
+	    addcCounter=addcCounter+1	
+	    if(args['mode']=="U"):
+	      fileXML.write(templateL1DDC_ADDC_Uncalibrated() % (felixComputer,felixDeviceId,felixDeviceId,elink,board,"ADDC"))
+	    if(args['mode']=="C"):
+	      fileXML.write(templateL1DDC_ADDC_Calibrated() % (felixComputer,felixDeviceId,felixDeviceId,elink,board,constant_1V5_ADDC[boardADDC.index(board)],constant_2V5_ADDC[boardADDC.index(board)],"ADDC"))
+	    if(args['mode']=="S"):
+	      fileXML.write(templateL1DDC_ADDC_Simulation() % (counter,board,"ADDC"))		
+    if(args['MMFE8']==True):
+	  if(re.compile("MMFE8").match(board)):
+	    mmmfe8Counter=mmmfe8Counter+1
+	    if(args['mode']=="U"):
+	      fileXML.write(templateMMFE8_Uncalibrated() % (felixComputer,felixDeviceId,felixDeviceId,elink,board,"MMFE8"))
+	    if(args['mode']=="C"):
+	      fileXML.write(templateMMFE8_Calibrated() % (felixComputer,felixDeviceId,felixDeviceId,elink,board,constant_1V2D[boardMMFE8.index(board)],constant_1V3[boardMMFE8.index(board)],constant_1V3E[boardMMFE8.index(board)],"MMFE8"))
+	    if(args['mode']=="S"):
+	      fileXML.write(templateMMFE8_Simulation() % (counter,board,"MMFE8"))		
 
 fileXML.write("""
     <AdcSampler name="adcSamplerMechanism" maxNumberThreads="8" />
@@ -91,13 +221,11 @@ print("*******        XML produced !!!!             ***********")
 print("********************************************************")
 
 
-
-
-
-
 fileXML.close()
 
 
+
+# ----------------------  Create SCA XML Entities -------------------------------------------------------
 
 fileSCA_MMFE8=open("SCA_MMFE8.xml","w+")
 fileSCA_L1DDC=open("SCA_L1DDC.xml","w+")
@@ -350,3 +478,5 @@ fileSCA_ADDC.write("""
 fileSCA_MMFE8.close()
 fileSCA_L1DDC.close()
 fileSCA_ADDC.close()
+
+#print("ADDC {}".format(args['ADDC']))
