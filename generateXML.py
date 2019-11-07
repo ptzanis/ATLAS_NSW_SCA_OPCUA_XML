@@ -4,6 +4,8 @@
 # Date 22/10/2019 : Merge Normal/Calibration/Simulation
 #                   Input arguments for boards selection
 #                   Input arguments for mode selection
+# Date 7/11/2019 :  Add Sector Input Argument
+#					Add SCA OPC UA Server Host Input Argument
 ###################################################################################
 
 # ----------------------  SCA templates -------------------------------------------------------
@@ -68,6 +70,10 @@ parser = argparse.ArgumentParser(description='Production of XML for SCA OPC UA S
 
 parser.add_argument("-mode", "--mode", type=str, default="N",
    help="Choose mode: [U]ncalibration/[C]alibration/[S]imulation")
+parser.add_argument("-sector", "--sector", type=str, 
+   help="Insert Sector side and number  e.g. A12,C01,..")
+parser.add_argument("-opcHost", "--opcHost", type=str, 
+   help="Insert SCA OPC UA Server Host PC")
 parser.add_argument("-m", "--MMFE8", action='store_true',
    help="Enable MMFE8")
 parser.add_argument("-l", "--L1DDC", action='store_true',
@@ -79,9 +85,11 @@ args = vars(parser.parse_args())
 # ----------------------  Selection Sector / FELIX machine -------------------------------------------------------
 
 # Select Sector 
-sector='A12'   
+sector=args['sector'] 
+
 # Select FELIX computer  
-felixComputer='pcatlnswfelix02'
+opcHost=args['opcHost'] 
+
 felixDeviceId="0"
 
 
@@ -90,12 +98,12 @@ felixDeviceId="0"
 # ----------------------  Main Code -------------------------------------------------------
 
 if(args['mode']=="U"):
-   fileXML=open('sector_'+sector+'_Uncalibration_NEW.xml',"w+")
+   fileXML=open('sectorDB/'+sector+'/sector_'+sector+'_Uncalibration_NEW.xml',"w+")
 if(args['mode']=="C"):
-    fileXML=open('sector_'+sector+'_Calibration_NEW.xml',"w+")
-    feastL1DDCFile = open('L1DDC_FEAST_CALIBRATION.txt','r')
-    feastMMFE8File = open('MMFE8_FEAST_CALIBRATION.txt','r')
-    feastADDCFile = open('ADDC_FEAST_CALIBRATION.txt','r')
+    fileXML=open('sectorDB/'+sector+'/sector_'+sector+'_Calibration_NEW.xml',"w+")
+    feastL1DDCFile = open('sectorDB/'+sector+'/L1DDC_FEAST_CALIBRATION_'+sector+'.txt','r')
+    feastMMFE8File = open('sectorDB/'+sector+'/MMFE8_FEAST_CALIBRATION_'+sector+'.txt','r')
+    feastADDCFile  = open('sectorDB/'+sector+'/ADDC_FEAST_CALIBRATION_'+sector+'.txt','r')
 		
     linesOffeastL1DDCFile=feastL1DDCFile.readlines()
     linesOffeastMMFE8File=feastMMFE8File.readlines()
@@ -133,7 +141,7 @@ if(args['mode']=="C"):
        constant_2V5_ADDC.append(line.split()[2])   
     feastADDCFile.close()
 if(args['mode']=="S"):
-   fileXML=open('sector_'+sector+'_Simulation_NEW.xml',"w+")   
+   fileXML=open('sectorDB/'+sector+'/sector_'+sector+'_Simulation_NEW.xml',"w+")
 
 
 elinksFile = open('boards_elink.txt','r')
@@ -181,27 +189,27 @@ for board,elink in zip(boards,elinks):
 	  if(re.compile("L1DDC").match(board)):
 	    l1ddcCounter=l1ddcCounter+1	
 	    if(args['mode']=="U"):
-	      fileXML.write(templateL1DDC_ADDC_Uncalibrated() % (felixComputer,felixDeviceId,felixDeviceId,elink,board,"L1DDC"))
+	      fileXML.write(templateL1DDC_ADDC_Uncalibrated() % (opcHost,felixDeviceId,felixDeviceId,elink,board,"L1DDC"))
 	    if(args['mode']=="C"):
-	      fileXML.write(templateL1DDC_ADDC_Calibrated() % (felixComputer,felixDeviceId,felixDeviceId,elink,board,constant_1V5_L1DDC[boardL1DDC.index(board)],constant_2V5_L1DDC[boardL1DDC.index(board)],"L1DDC"))
+	      fileXML.write(templateL1DDC_ADDC_Calibrated() % (opcHost,felixDeviceId,felixDeviceId,elink,board,constant_1V5_L1DDC[boardL1DDC.index(board)],constant_2V5_L1DDC[boardL1DDC.index(board)],"L1DDC"))
 	    if(args['mode']=="S"):
 	      fileXML.write(templateL1DDC_ADDC_Simulation() % (counter,board,"L1DDC"))
     if(args['ADDC']==True):
 	  if(re.compile("ADDC").match(board)):
 	    addcCounter=addcCounter+1	
 	    if(args['mode']=="U"):
-	      fileXML.write(templateL1DDC_ADDC_Uncalibrated() % (felixComputer,felixDeviceId,felixDeviceId,elink,board,"ADDC"))
+	      fileXML.write(templateL1DDC_ADDC_Uncalibrated() % (opcHost,felixDeviceId,felixDeviceId,elink,board,"ADDC"))
 	    if(args['mode']=="C"):
-	      fileXML.write(templateL1DDC_ADDC_Calibrated() % (felixComputer,felixDeviceId,felixDeviceId,elink,board,constant_1V5_ADDC[boardADDC.index(board)],constant_2V5_ADDC[boardADDC.index(board)],"ADDC"))
+	      fileXML.write(templateL1DDC_ADDC_Calibrated() % (opcHost,felixDeviceId,felixDeviceId,elink,board,constant_1V5_ADDC[boardADDC.index(board)],constant_2V5_ADDC[boardADDC.index(board)],"ADDC"))
 	    if(args['mode']=="S"):
 	      fileXML.write(templateL1DDC_ADDC_Simulation() % (counter,board,"ADDC"))		
     if(args['MMFE8']==True):
 	  if(re.compile("MMFE8").match(board)):
 	    mmmfe8Counter=mmmfe8Counter+1
 	    if(args['mode']=="U"):
-	      fileXML.write(templateMMFE8_Uncalibrated() % (felixComputer,felixDeviceId,felixDeviceId,elink,board,"MMFE8"))
+	      fileXML.write(templateMMFE8_Uncalibrated() % (opcHost,felixDeviceId,felixDeviceId,elink,board,"MMFE8"))
 	    if(args['mode']=="C"):
-	      fileXML.write(templateMMFE8_Calibrated() % (felixComputer,felixDeviceId,felixDeviceId,elink,board,constant_1V2D[boardMMFE8.index(board)],constant_1V3[boardMMFE8.index(board)],constant_1V3E[boardMMFE8.index(board)],"MMFE8"))
+	      fileXML.write(templateMMFE8_Calibrated() % (opcHost,felixDeviceId,felixDeviceId,elink,board,constant_1V2D[boardMMFE8.index(board)],constant_1V3[boardMMFE8.index(board)],constant_1V3E[boardMMFE8.index(board)],"MMFE8"))
 	    if(args['mode']=="S"):
 	      fileXML.write(templateMMFE8_Simulation() % (counter,board,"MMFE8"))		
 
