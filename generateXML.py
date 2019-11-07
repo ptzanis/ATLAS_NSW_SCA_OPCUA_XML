@@ -66,7 +66,7 @@ def templateMMFE8_Simulation():
 import argparse
 import re
 
-parser = argparse.ArgumentParser(description='Production of XML for SCA OPC UA Server')
+parser = argparse.ArgumentParser(description='Production of XML for SCA OPC UA Server per NSW sector')
 
 parser.add_argument("-mode", "--mode", type=str, default="N",
    help="Choose mode: [U]ncalibration/[C]alibration/[S]imulation")
