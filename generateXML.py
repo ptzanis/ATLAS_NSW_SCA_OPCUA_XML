@@ -90,11 +90,6 @@ sector=args['sector']
 # Select FELIX computer  
 opcHost=args['opcHost'] 
 
-felixDeviceId="0"
-
-
-
-
 # ----------------------  Main Code -------------------------------------------------------
 
 if(args['mode']=="U"):
@@ -181,6 +176,8 @@ fileXML.write("""<?xml version="1.0" encoding="UTF-8"?>
 
 mmmfe8Counter=addcCounter=l1ddcCounter=0
 counter=0
+felixDeviceId="0"
+
 for board,elink in zip(boards,elinks):
     counter=counter+1
     if(re.compile("83f").match(elink)):
