@@ -6,6 +6,8 @@
 #                   Input arguments for mode selection
 # Date 7/11/2019 :  Add Sector Input Argument
 #					Add SCA OPC UA Server Host Input Argument
+# Date 2/12/2019 :  Board/Elink per sector
+#					
 ###################################################################################
 
 # ----------------------  SCA templates -------------------------------------------------------
@@ -139,7 +141,7 @@ if(args['mode']=="S"):
    fileXML=open('sectorDB/'+sector+'/sector_'+sector+'_Simulation_NEW.xml',"w+")
 
 
-elinksFile = open('boards_elink.txt','r')
+elinksFile = open('sectorDB/'+sector+'/boards_elink_'+sector+'.txt','r')
 linesOfElinksFile=elinksFile.readlines()
 
 boards=[]
