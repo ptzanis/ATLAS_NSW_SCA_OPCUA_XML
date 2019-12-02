@@ -95,12 +95,12 @@ opcHost=args['opcHost']
 # ----------------------  Main Code -------------------------------------------------------
 
 if(args['mode']=="U"):
-   fileXML=open('sectorDB/'+sector+'/sector_'+sector+'_Uncalibration_NEW.xml',"w+")
+   fileXML=open('sectorDB_MMG/'+sector+'/sector_'+sector+'_Uncalibration_NEW.xml',"w+")
 if(args['mode']=="C"):
-    fileXML=open('sectorDB/'+sector+'/sector_'+sector+'_Calibration_NEW.xml',"w+")
-    feastL1DDCFile = open('sectorDB/'+sector+'/L1DDC_FEAST_CALIBRATION_'+sector+'.txt','r')
-    feastMMFE8File = open('sectorDB/'+sector+'/MMFE8_FEAST_CALIBRATION_'+sector+'.txt','r')
-    feastADDCFile  = open('sectorDB/'+sector+'/ADDC_FEAST_CALIBRATION_'+sector+'.txt','r')
+    fileXML=open('sectorDB_MMG/'+sector+'/sector_'+sector+'_Calibration_NEW.xml',"w+")
+    feastL1DDCFile = open('sectorDB_MMG/'+sector+'/L1DDC_FEAST_CALIBRATION_'+sector+'.txt','r')
+    feastMMFE8File = open('sectorDB_MMG/'+sector+'/MMFE8_FEAST_CALIBRATION_'+sector+'.txt','r')
+    feastADDCFile  = open('sectorDB_MMG/'+sector+'/ADDC_FEAST_CALIBRATION_'+sector+'.txt','r')
 		
     linesOffeastL1DDCFile=feastL1DDCFile.readlines()
     linesOffeastMMFE8File=feastMMFE8File.readlines()
@@ -138,10 +138,10 @@ if(args['mode']=="C"):
        constant_2V5_ADDC.append(line.split()[2])   
     feastADDCFile.close()
 if(args['mode']=="S"):
-   fileXML=open('sectorDB/'+sector+'/sector_'+sector+'_Simulation_NEW.xml',"w+")
+   fileXML=open('sectorDB_MMG/'+sector+'/sector_'+sector+'_Simulation_NEW.xml',"w+")
 
 
-elinksFile = open('sectorDB/'+sector+'/boards_elink_'+sector+'.txt','r')
+elinksFile = open('sectorDB_MMG/'+sector+'/boards_elink_'+sector+'.txt','r')
 linesOfElinksFile=elinksFile.readlines()
 
 boards=[]
