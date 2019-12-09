@@ -7,7 +7,8 @@
 # Date 7/11/2019 :  Add Sector Input Argument
 #					Add SCA OPC UA Server Host Input Argument
 # Date 2/12/2019 :  Board/Elink per sector
-#					
+# Date 6/12/2019 :  Add location argument e.g BB5/191/180
+#					Arguements error handling
 ###################################################################################
 
 # ----------------------  SCA templates -------------------------------------------------------
@@ -67,15 +68,18 @@ def templateMMFE8_Simulation():
 
 import argparse
 import re
+import sys
 
 parser = argparse.ArgumentParser(description='Production of XML for SCA OPC UA Server per NSW sector')
 
-parser.add_argument("-mode", "--mode", type=str, default="N",
+parser.add_argument("-mode", "--mode", type=str, default="U",
    help="Choose mode: [U]ncalibration/[C]alibration/[S]imulation")
 parser.add_argument("-sector", "--sector", type=str, 
    help="Insert Sector side and number  e.g. A12,C01,..")
 parser.add_argument("-opcHost", "--opcHost", type=str, 
    help="Insert SCA OPC UA Server Host PC")
+parser.add_argument("-location", "--location", type=str, 
+   help="Insert SCA OPC UA Server location (BB5,191)")
 parser.add_argument("-m", "--MMFE8", action='store_true',
    help="Enable MMFE8")
 parser.add_argument("-l", "--L1DDC", action='store_true',
@@ -83,6 +87,18 @@ parser.add_argument("-l", "--L1DDC", action='store_true',
 parser.add_argument("-a", "--ADDC", action='store_true',
    help="Enable ADDC")
 args = vars(parser.parse_args())
+
+# ----------------------  Function arguments error handling -------------------------------------------------------
+
+if not(re.compile("U|C|S").match(args['mode'])):
+	print("********   Wrong Mode | Please provide a valid mode : U or C or S   ******** ")
+	sys.exit()
+if not(re.compile("(A|C)(0[1-9]|1[0-6])").match(args['sector'])):
+	print("********   Wrong Sector ID | Please provide a valid sector ID: A01-16 or C01-16   ******** ")
+	sys.exit()
+if not(re.compile("BB5|191").match(args['location'])):
+	print("********   Wrong Location | Please provide a valid location: BB5 or 191   ******** ")
+	sys.exit()
 
 # ----------------------  Selection Sector / FELIX machine -------------------------------------------------------
 
@@ -92,12 +108,15 @@ sector=args['sector']
 # Select FELIX computer  
 opcHost=args['opcHost'] 
 
+# Select sector location  
+location=args['location'] 
+
 # ----------------------  Main Code -------------------------------------------------------
 
 if(args['mode']=="U"):
-   fileXML=open('sectorDB_MMG/'+sector+'/sector_'+sector+'_Uncalibration_NEW.xml',"w+")
+   fileXML=open('sectorDB_MMG/'+sector+'/sector_'+sector+'_Uncalibration_MMG_'+location+'.xml',"w+")
 if(args['mode']=="C"):
-    fileXML=open('sectorDB_MMG/'+sector+'/sector_'+sector+'_Calibration_NEW.xml',"w+")
+    fileXML=open('sectorDB_MMG/'+sector+'/sector_'+sector+'_Calibration_MMG_'+location+'.xml',"w+")
     feastL1DDCFile = open('sectorDB_MMG/'+sector+'/L1DDC_FEAST_CALIBRATION_'+sector+'.txt','r')
     feastMMFE8File = open('sectorDB_MMG/'+sector+'/MMFE8_FEAST_CALIBRATION_'+sector+'.txt','r')
     feastADDCFile  = open('sectorDB_MMG/'+sector+'/ADDC_FEAST_CALIBRATION_'+sector+'.txt','r')
@@ -138,10 +157,10 @@ if(args['mode']=="C"):
        constant_2V5_ADDC.append(line.split()[2])   
     feastADDCFile.close()
 if(args['mode']=="S"):
-   fileXML=open('sectorDB_MMG/'+sector+'/sector_'+sector+'_Simulation_NEW.xml',"w+")
+   fileXML=open('sectorDB_MMG/'+sector+'/sector_'+sector+'_Simulation_MMG_'+location+'.xml',"w+")
 
+elinksFile = open('sectorDB_MMG/'+sector+'/boards_elink_'+sector+'_'+location+'.txt','r')
 
-elinksFile = open('sectorDB_MMG/'+sector+'/boards_elink_'+sector+'.txt','r')
 linesOfElinksFile=elinksFile.readlines()
 
 boards=[]
