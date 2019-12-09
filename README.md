@@ -4,7 +4,7 @@ Tool to create XML file for OPC UA SCA Server and calibrate FEAST temperature se
 
 # How to run
 ```
-python generateXML.py -mode U/C/S -sector A12 -opcHost pcatlnswfelix04 -location BB5 -m -l -a 
+python generateXML_MMG.py -mode U/C/S -sector A12 -opcHost pcatlnswfelix04 -location BB5 -m -l -a 
 ```
 Mode Arguments:
 *  U for Uncalibrated
