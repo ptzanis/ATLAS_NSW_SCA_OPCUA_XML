@@ -66,7 +66,7 @@ parser.add_argument("-rl2", "--RIML1DDC2", action='store_true',
    help="Enable RIML1DDC2")
 parser.add_argument("-r", "--ROUTER", action='store_true',
    help="Enable ROUTER")
-parser.add_argument("-p", "--PADTRIGGER", action='store_true',
+parser.add_argument("-pad", "--PADTRIGGER", action='store_true',
    help="Enable PAD TRIGGER")
 args = vars(parser.parse_args())	
 

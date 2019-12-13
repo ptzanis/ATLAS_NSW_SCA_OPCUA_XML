@@ -504,5 +504,3 @@ fileSCA_ADDC.write("""
 fileSCA_MMFE8.close()
 fileSCA_L1DDC.close()
 fileSCA_ADDC.close()
-
-#print("ADDC {}".format(args['ADDC']))
