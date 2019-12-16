@@ -155,7 +155,7 @@ felixDeviceId="0"
 
 for board,elink in zip(boards,elinks):
     counter=counter+1
-    if(re.compile("83f").match(elink)):
+    if(re.compile("9bf").match(elink)):
 	  felixDeviceId="1"
     if(args['SFEB']==True):
 	  if(re.compile("SFEB").match(board)):
