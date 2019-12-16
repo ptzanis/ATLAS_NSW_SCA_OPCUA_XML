@@ -201,8 +201,10 @@ felixDeviceId="0"
 
 for board,elink in zip(boards,elinks):
     counter=counter+1
-    if(re.compile("83f").match(elink)):
+    if(location=="BB5" and re.compile("83f").match(elink)):
 	  felixDeviceId="1"
+    if(location=="191" and re.compile("9bf").match(elink)):
+	  felixDeviceId="1"	  
     if(args['L1DDC']==True):
 	  if(re.compile("L1DDC").match(board)):
 	    l1ddcCounter=l1ddcCounter+1	
