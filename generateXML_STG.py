@@ -184,49 +184,49 @@ for board,elink in zip(boards,elinks):
 	    if(args['mode']=="U"):
 	      fileXML.write(templateSFEB_PFEB_PADTRIGGER_Uncalibrated() % (opcHost,felixDeviceId,felixDeviceId,elink,board,"SFEB"))
 	    if(args['mode']=="S"):
-	      fileXML.write(template_Simulation() % (counter,board,"SFEB"))
+	      fileXML.write(templateSFEB_PFEB_PADTRIGGER_Simulation() % (counter,board,"SFEB"))
     if(args['PFEB']==True):
 	  if(re.compile("PFEB").match(board)):
 	    pfebcounter=pfebcounter+1	
 	    if(args['mode']=="U"):
 	      fileXML.write(templateSFEB_PFEB_PADTRIGGER_Uncalibrated() % (opcHost,felixDeviceId,felixDeviceId,elink,board,"PFEB"))
 	    if(args['mode']=="S"):
-	      fileXML.write(template_Simulation() % (counter,board,"PFEB"))		
+	      fileXML.write(templateSFEB_PFEB_PADTRIGGER_Simulation() % (counter,board,"PFEB"))		
     if(args['PADTRIGGER']==True):
 	  if(re.compile("PADTRIGGER").match(board)):
 	    padtriggercounter=padtriggercounter+1	
 	    if(args['mode']=="U"):
 	      fileXML.write(templateSFEB_PFEB_PADTRIGGER_Uncalibrated() % (opcHost,felixDeviceId,felixDeviceId,elink,board,"PADTRIGGER"))
 	    if(args['mode']=="S"):
-	      fileXML.write(template_Simulation() % (counter,board,"PADTRIGGER"))	
+	      fileXML.write(templateSFEB_PFEB_PADTRIGGER_Simulation() % (counter,board,"PADTRIGGER"))	
     if(args['L1DDC']==True):
 	  if(re.compile("L1DDC").match(board)):
 	    l1ddccounter=l1ddccounter+1	
 	    if(args['mode']=="U"):
 	      fileXML.write(templateL1DDC_RIML1DDC1_RIML1DDC2_Uncalibrated() % (opcHost,felixDeviceId,felixDeviceId,elink,board,"L1DDC"))
 	    if(args['mode']=="S"):
-	      fileXML.write(template_Simulation() % (counter,board,"L1DDC"))	
+	      fileXML.write(templateL1DDC_RIML1DDC1_RIML1DDC2_Simulation() % (counter,board,"L1DDC"))	
     if(args['RIML1DDC1']==True):
 	  if(re.compile("RIML1DDC1").match(board)):
 	    riml1ddc1counter=riml1ddc1counter+1	
 	    if(args['mode']=="U"):
 	      fileXML.write(templateL1DDC_RIML1DDC1_RIML1DDC2_Uncalibrated() % (opcHost,felixDeviceId,felixDeviceId,elink,board,"RIML1DDC1"))
 	    if(args['mode']=="S"):
-	      fileXML.write(template_Simulation() % (counter,board,"RIML1DDC1"))
+	      fileXML.write(templateL1DDC_RIML1DDC1_RIML1DDC2_Simulation() % (counter,board,"RIML1DDC1"))
     if(args['RIML1DDC2']==True):
 	  if(re.compile("RIML1DDC2").match(board)):
 	    riml1ddc2counter=riml1ddc2counter+1	
 	    if(args['mode']=="U"):
 	      fileXML.write(templateL1DDC_RIML1DDC1_RIML1DDC2_Uncalibrated() % (opcHost,felixDeviceId,felixDeviceId,elink,board,"RIML1DDC2"))
 	    if(args['mode']=="S"):
-	      fileXML.write(template_Simulation() % (counter,board,"RIML1DDC2"))
+	      fileXML.write(templateL1DDC_RIML1DDC1_RIML1DDC2_Simulation() % (counter,board,"RIML1DDC2"))
     if(args['ROUTER']==True):
 	  if(re.compile("ROUTER").match(board)):
 	    routercounter=routercounter+1	
 	    if(args['mode']=="U"):
 	      fileXML.write(templateROUTER_Uncalibrated() % (opcHost,felixDeviceId,felixDeviceId,elink,board,"ROUTER"))
 	    if(args['mode']=="S"):
-	      fileXML.write(template_Simulation() % (counter,board,"ROUTER"))
+	      fileXML.write(templateROUTER_Simulation() % (counter,board,"ROUTER"))
 
 
 fileXML.write("""
