@@ -32,9 +32,30 @@ def templateROUTER_Uncalibrated():
 	    &SCA_%s;
     </SCA>
 	"""	
-def template_Simulation():
+def templateSFEB_PFEB_PADTRIGGER_Simulation():
 	return """   
 	 <SCA address="sca-simulator://%s" name="%s" idConstraint="dont_care" supervised="true" recoveryActionScaStayedPowered="do_nothing" recoveryActionScaWasRepowered="reset_and_configure" managementFromAddressSpace="only_if_kaputt" >
+        &SCA_%s;
+    </SCA>
+	"""
+def templateL1DDC_RIML1DDC1_RIML1DDC2_Simulation():
+	return """   
+	 <SCA address="sca-simulator://%s" name="%s" idConstraint="dont_care" supervised="true" recoveryActionScaStayedPowered="do_nothing" recoveryActionScaWasRepowered="reset_and_configure" managementFromAddressSpace="only_if_kaputt" >
+	 <CalculatedVariable name="constant_1V5" value="0.0" />
+	 <CalculatedVariable name="constant_2V5" value="0.0" />     
+        &SCA_%s;
+    </SCA>
+	"""	
+def templateROUTER_Simulation():
+	return """   
+	 <SCA address="sca-simulator://%s" name="%s" idConstraint="dont_care" supervised="true" recoveryActionScaStayedPowered="do_nothing" recoveryActionScaWasRepowered="reset_and_configure" managementFromAddressSpace="only_if_kaputt" >
+    <CalculatedVariable name="constant_feastVccIntTemp" value="0.0" />
+	<CalculatedVariable name="constant_feastMgtVccTemp" value="0.0" /> 
+	<CalculatedVariable name="constant_feastAuxTemp" value="0.0" /> 
+	<CalculatedVariable name="constant_feastMgtVttTemp" value="0.0" />
+	<CalculatedVariable name="constant_feastVcc2V5Temp" value="0.0" /> 
+	<CalculatedVariable name="constant_feastVcc3V3Temp" value="0.0" />
+	<CalculatedVariable name="constant_feastVcc1V5Temp" value="0.0" /> 	
         &SCA_%s;
     </SCA>
 	"""
