@@ -217,6 +217,7 @@ print("********************************************************")
 
 print("		Number of SFEB boards: "+str(sfebcounter))
 print("		Number of PFEB boards: "+str(pfebcounter))
+print("		Number of L1DDC boards: "+str(l1ddccounter))
 print("		Number of RIML1DDC1 boards: "+str(riml1ddc1counter))
 print("		Number of RIML1DDC2 boards: "+str(riml1ddc2counter))
 print("		Number of Pad Trigger boards: "+str(padtriggercounter))
@@ -508,7 +509,7 @@ fileSCA_SFEB.write("""
         </I2cMaster>
 	""")
 
-fileSCA_PFEB=write("""
+fileSCA_PFEB.write("""
         <AnalogInputSystem name="ai" generalRefreshRate="5">
             <AnalogInput name="vmmPdo0" id="0">   <CalculatedVariable name="temperature" value="$applyGenericFormula(vmmTemperature)"  />  </AnalogInput>
             <AnalogInput name="vmmPdo1" id="1">   <CalculatedVariable name="temperature" value="$applyGenericFormula(vmmTemperature)"  />  </AnalogInput>
@@ -686,7 +687,7 @@ fileSCA_PFEB=write("""
         </I2cMaster>	
 	""")
 
-fileSCA_L1DDC=write("""
+fileSCA_L1DDC.write("""
 		<AnalogInputSystem name="ai" generalRefreshRate="5">
            <AnalogInput id="0" name="GBTX1_TEMP" enableCurrentSource="true" > <CalculatedVariable name="temperature" value="$applyGenericFormula(thermistorTemperature)" /> </AnalogInput>
            <AnalogInput id="1" name="GBTX2_TEMP" enableCurrentSource="true" > <CalculatedVariable name="temperature" value="$applyGenericFormula(thermistorTemperature)" /> </AnalogInput>
@@ -706,7 +707,7 @@ fileSCA_L1DDC=write("""
 		</I2cMaster>	
 		""")
 
-fileSCA_PADTRIGGER=write("""
+fileSCA_PADTRIGGER.write("""
 		<AnalogInputSystem name="ai" generalRefreshRate="5">
 			<AnalogInput name="P2V5_2" id= "20"> <CalculatedVariable name="power" value="$thisObjectAddress.value*1.0" />	 </AnalogInput>
 			<AnalogInput name="P1V8A" id= "21"> <CalculatedVariable name="power" value="$thisObjectAddress.value*1.0" />	 </AnalogInput>
@@ -834,7 +835,7 @@ fileSCA_ROUTER.write("""
         </I2cMaster>	
 		""")
 
-fileRIML1DDC1=write("""
+fileRIML1DDC1.write("""
 		<AnalogInputSystem name="ai" generalRefreshRate="0">
 			<AnalogInput name="GBTX1_TEMP" id="0" enableCurrentSource="true" >  <CalculatedVariable name="temperature" value="$applyGenericFormula(thermistorTemperature)" /> </AnalogInput>
 			<AnalogInput name="1V5_PTAT1" id="3">                               <CalculatedVariable name="temperature" value="$applyGenericFormula(feastTemperature_1V5)" />  </AnalogInput>
@@ -865,7 +866,7 @@ fileRIML1DDC1=write("""
 		</DigitalIOSystem>	
 		""")
 
-fileRIML1DDC2=write("""
+fileRIML1DDC2.write("""
 		<AnalogInputSystem name="ai" generalRefreshRate="0">
 			<AnalogInput name="GBTX2_TEMP" id="0" enableCurrentSource="true" >  <CalculatedVariable name="temperature" value="$applyGenericFormula(thermistorTemperature)" /> </AnalogInput>
 			<AnalogInput name="1V5_PTAT2" id="3">                               <CalculatedVariable name="temperature" value="$applyGenericFormula(feastTemperature_1V5)" />  </AnalogInput>
