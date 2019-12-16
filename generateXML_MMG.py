@@ -8,7 +8,7 @@
 #					Add SCA OPC UA Server Host Input Argument
 # Date 2/12/2019 :  Board/Elink per sector
 # Date 6/12/2019 :  Add location argument e.g BB5/191/180
-#					Arguements error handling
+#					Arguments error handling
 ###################################################################################
 
 # ----------------------  SCA templates -------------------------------------------------------
