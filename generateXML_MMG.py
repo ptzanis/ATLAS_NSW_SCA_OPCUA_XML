@@ -310,6 +310,14 @@ fileSCA_MMFE8.write("""
       <DigitalIO id="18" isInput="true" name="rocCoreSda"/>
       <DigitalIO id="19" isInput="true" name="rocPllScl"/>
       <DigitalIO id="20" isInput="true" name="rocPllSda"/>
+      <GpioBitBanger name="bitBanger">
+               <allowedPins>
+                   <value>17</value>
+                   <value>18</value>
+                   <value>19</value>
+                   <value>20</value>
+               </allowedPins>
+      </GpioBitBanger>
     </DigitalIOSystem>
     <I2cMaster busSpeed="200" masterId="0" name="rocCoreDigital" sclPadCmosOutput="false">
       <I2cSlave address="0" addressingMode="10" name="reg000rocId" numberOfBytes="1"/>
