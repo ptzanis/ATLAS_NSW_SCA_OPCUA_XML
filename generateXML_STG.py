@@ -866,24 +866,25 @@ fileRIML1DDC1.write("""
 			<AnalogInput name="VTRX1_RSSI" id="7">     			 			    <CalculatedVariable name="power" value="$applyGenericFormula(rssiCurrentmA)" /> 	            </AnalogInput>
 			<AnalogInput name="VTRX1_REF_RSSI" id="8">				 		    <CalculatedVariable name="power" value="$applyGenericFormula(rssiCurrentmA)" /> 	            </AnalogInput>
 			<AnalogInput name="internalTemperature1" id="31">  					<CalculatedVariable name="temperature" value="$applyGenericFormula(scaTemperature)" />         </AnalogInput>
+		</AnalogInputSystem>
 		
 		<I2cMaster sclPadCmosOutput="false" name="vtrx3" masterId="0" busSpeed="100">
 			<I2cSlave numberOfBytes="3" address="1" addressingMode="7" name="vtrx3"></I2cSlave>
 		</I2cMaster>
 		
 		<DigitalIOSystem name="gpio">
-			<DigitalIO name="feast_en1_r1" isInput="false" id="1"></DigitalIO>
-			<DigitalIO name="feast_en1_r2" isInput="false" id="2"></DigitalIO>
-			<DigitalIO name="feast_en1_r3" isInput="false" id="3"></DigitalIO>
-			<DigitalIO name="feast_en1_r4" isInput="false" id="4"></DigitalIO>
-			<DigitalIO name="feast_en1_r5" isInput="false" id="5"></DigitalIO>
-			<DigitalIO name="feast_en1_r6" isInput="false" id="6"></DigitalIO>	
-			<DigitalIO name="feast_en1_r7" isInput="false" id="7"></DigitalIO>
-			<DigitalIO name="feast_en1_r8" isInput="false" id="8"></DigitalIO>	
-			<DigitalIO name="feast_en1_pad" isInput="false" id="9"></DigitalIO>	
+			<DigitalIO name="feast_en1_r1" isInput="false" id="0"></DigitalIO>
+			<DigitalIO name="feast_en1_r2" isInput="false" id="1"></DigitalIO>
+			<DigitalIO name="feast_en1_r3" isInput="false" id="2"></DigitalIO>
+			<DigitalIO name="feast_en1_r4" isInput="false" id="3"></DigitalIO>
+			<DigitalIO name="feast_en1_r5" isInput="false" id="4"></DigitalIO>
+			<DigitalIO name="feast_en1_r6" isInput="false" id="5"></DigitalIO>	
+			<DigitalIO name="feast_en1_r7" isInput="false" id="6"></DigitalIO>
+			<DigitalIO name="feast_en1_r8" isInput="false" id="7"></DigitalIO>	
+			<DigitalIO name="feast_en1_pad" isInput="false" id="8"></DigitalIO>	
 			<DigitalIO name="sca1_sel0" isInput="false" id="9"></DigitalIO>	
-			<DigitalIO name="sca1_sel1" isInput="false" id="9"></DigitalIO>
-			<DigitalIO name="sca1_sel" isInput="false" id="9"></DigitalIO>	
+			<DigitalIO name="sca1_sel1" isInput="false" id="10"></DigitalIO>
+			<DigitalIO name="sca1_sel" isInput="false" id="11"></DigitalIO>	
 		</DigitalIOSystem>	
 		""")
 
@@ -897,24 +898,25 @@ fileRIML1DDC2.write("""
 			<AnalogInput name="VTRX2_RSSI" id="7">     			 			    <CalculatedVariable name="power" value="$applyGenericFormula(rssiCurrentmA)" /> 	            </AnalogInput>
 			<AnalogInput name="VTRX2_REF_RSSI" id="8">				 		    <CalculatedVariable name="power" value="$applyGenericFormula(rssiCurrentmA)" /> 	            </AnalogInput>
 			<AnalogInput name="internalTemperature2" id="31">  					<CalculatedVariable name="temperature" value="$applyGenericFormula(scaTemperature)" />         </AnalogInput>
+		</AnalogInputSystem>
 		
 		<I2cMaster sclPadCmosOutput="false" name="vtrx4" masterId="0" busSpeed="100">
 			<I2cSlave numberOfBytes="3" address="1" addressingMode="7" name="vtrx4"></I2cSlave>
 		</I2cMaster>
 		
 		<DigitalIOSystem name="gpio">
-			<DigitalIO name="feast_en2_r1" isInput="false" id="1"></DigitalIO>
-			<DigitalIO name="feast_en2_r2" isInput="false" id="2"></DigitalIO>
-			<DigitalIO name="feast_en2_r3" isInput="false" id="3"></DigitalIO>
-			<DigitalIO name="feast_en2_r4" isInput="false" id="4"></DigitalIO>
-			<DigitalIO name="feast_en2_r5" isInput="false" id="5"></DigitalIO>
-			<DigitalIO name="feast_en2_r6" isInput="false" id="6"></DigitalIO>	
-			<DigitalIO name="feast_en2_r7" isInput="false" id="7"></DigitalIO>
-			<DigitalIO name="feast_en2_r8" isInput="false" id="8"></DigitalIO>	
-			<DigitalIO name="feast_en2_pad" isInput="false" id="9"></DigitalIO>	
+			<DigitalIO name="feast_en2_r1" isInput="false" id="0"></DigitalIO>
+			<DigitalIO name="feast_en2_r2" isInput="false" id="1"></DigitalIO>
+			<DigitalIO name="feast_en2_r3" isInput="false" id="2"></DigitalIO>
+			<DigitalIO name="feast_en2_r4" isInput="false" id="3"></DigitalIO>
+			<DigitalIO name="feast_en2_r5" isInput="false" id="4"></DigitalIO>
+			<DigitalIO name="feast_en2_r6" isInput="false" id="5"></DigitalIO>	
+			<DigitalIO name="feast_en2_r7" isInput="false" id="6"></DigitalIO>
+			<DigitalIO name="feast_en2_r8" isInput="false" id="7"></DigitalIO>	
+			<DigitalIO name="feast_en2_pad" isInput="false" id="8"></DigitalIO>	
 			<DigitalIO name="sca2_sel0" isInput="false" id="9"></DigitalIO>	
-			<DigitalIO name="sca2_sel1" isInput="false" id="9"></DigitalIO>
-			<DigitalIO name="sca2_sel" isInput="false" id="9"></DigitalIO>	
+			<DigitalIO name="sca2_sel1" isInput="false" id="10"></DigitalIO>
+			<DigitalIO name="sca2_sel" isInput="false" id="11"></DigitalIO>	
 		</DigitalIOSystem>	
 		""")
 
