@@ -732,16 +732,37 @@ fileSCA_PADTRIGGER.write("""
 		</AnalogInputSystem>
 
 		<DigitalIOSystem name="gpio">
-			<DigitalIO name="gpio-repeaterChip1" isInput="false" id="6"></DigitalIO>
-			<DigitalIO name="gpio-repeaterChip2" isInput="false" id="7"></DigitalIO>
-			<DigitalIO name="gpio-repeaterChip3" isInput="false" id="8"></DigitalIO>
-			<DigitalIO name="gpio-repeaterChip4" isInput="false" id="9"></DigitalIO>
-			<DigitalIO name="gpio-repeaterChip5" isInput="false" id="10"></DigitalIO>
-			<DigitalIO name="gpio-repeaterChip6" isInput="false" id="11"></DigitalIO>
+		    <DigitalIO name="clock160_pri_sec" isInput="false" id="0"></DigitalIO>
+		    <DigitalIO name="clock_xo160_enable" isInput="false" id="1"></DigitalIO>
+		    <DigitalIO name="VTTx_disable" isInput="false" id="2"></DigitalIO>
+		    <DigitalIO name="FPGA_PROGRAM" isInput="true" id="3"></DigitalIO>
+		    <DigitalIO name="FPGA_INIT" isInput="true" id="4"></DigitalIO>
+		    <DigitalIO name="FPGA_DONE" isInput="true" id="5"></DigitalIO>
+		   	<DigitalIO name="gpio-repeaterChip1" isInput="false" id="6"></DigitalIO>
+		    <DigitalIO name="gpio-repeaterChip2" isInput="false" id="7"></DigitalIO>
+		    <DigitalIO name="gpio-repeaterChip3" isInput="false" id="8"></DigitalIO>
+		    <DigitalIO name="gpio-repeaterChip4" isInput="false" id="9"></DigitalIO>
+		    <DigitalIO name="gpio-repeaterChip5" isInput="false" id="10"></DigitalIO>
+		    <DigitalIO name="gpio-repeaterChip6" isInput="false" id="11"></DigitalIO>
+		    <DigitalIO name="FPGA_general12" isInput="false" id="12"></DigitalIO>
+		    <DigitalIO name="FPGA_general13" isInput="false" id="13"></DigitalIO>
+		    <DigitalIO name="FPGA_general14" isInput="false" id="14"></DigitalIO>
+		    <DigitalIO name="FPGA_general15" isInput="false" id="15"></DigitalIO>
+		    <DigitalIO name="FPGA_general16" isInput="false" id="16"></DigitalIO>
+		    <DigitalIO name="FPGA_general17" isInput="false" id="17"></DigitalIO>
+		    <DigitalIO name="FPGA_general18" isInput="false" id="18"></DigitalIO>
+		    <DigitalIO name="FPGA_general19" isInput="false" id="19"></DigitalIO>
+		    <DigitalIO name="FPGA_general20" isInput="false" id="20"></DigitalIO>
+		    <DigitalIO name="FPGA_general21" isInput="false" id="21"></DigitalIO>
+		    <DigitalIO name="FPGA_general22" isInput="false" id="22"></DigitalIO>
+		    <DigitalIO name="FPGA_general23" isInput="false" id="23"></DigitalIO>
 		</DigitalIOSystem>
-
+		
+        <I2cMaster sclPadCmosOutput="true" name="fpga" masterId="0" busSpeed="100">
+           <I2cSlave numberOfBytes="1" address="127" addressingMode="7" name="fpga"></I2cSlave>
+        </I2cMaster>
 		<I2cMaster sclPadCmosOutput="false" name="repeaterChip1" masterId="3" busSpeed="100">
-			<I2cSlave numberOfBytes="1" address="86" addressingMode="7" name="repeaterChip1"></I2cSlave>
+	    	<I2cSlave numberOfBytes="1" address="86" addressingMode="7" name="repeaterChip1"></I2cSlave>
 		</I2cMaster>
 		<I2cMaster sclPadCmosOutput="false" name="repeaterChip2" masterId="4" busSpeed="100">
 			<I2cSlave numberOfBytes="1" address="86" addressingMode="7" name="repeaterChip2"></I2cSlave>
@@ -758,15 +779,7 @@ fileSCA_PADTRIGGER.write("""
 		<I2cMaster sclPadCmosOutput="false" name="repeaterChip6" masterId="8" busSpeed="100">
 			<I2cSlave numberOfBytes="1" address="86" addressingMode="7" name="repeaterChip6"></I2cSlave>
 		</I2cMaster>
-        <I2cMaster sclPadCmosOutput="true" name="vttx1" masterId="1" busSpeed="100">
-            <I2cSlave numberOfBytes="1" address="126" addressingMode="7" name="vttx1"></I2cSlave>
-         </I2cMaster>
-            <I2cMaster sclPadCmosOutput="true" name="vttx2" masterId="2" busSpeed="100">
-         <I2cSlave numberOfBytes="1" address="126" addressingMode="7" name="vttx2"></I2cSlave>
-         </I2cMaster>
-         <I2cMaster sclPadCmosOutput="true" name="fpga" masterId="0" busSpeed="100">
-            <I2cSlave numberOfBytes="1" address="127" addressingMode="7" name="fpga"></I2cSlave>
-        </I2cMaster>
+
          <JtagSystem name="jtag">
             <XilinxFpga name="fpga" jtagClockMhz="10"/>
          </JtagSystem>	
