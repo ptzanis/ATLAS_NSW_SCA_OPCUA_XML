@@ -117,10 +117,10 @@ location=args['location']
 # ----------------------  Main Code -------------------------------------------------------
 
 if(args['mode']=="U"):
-   fileXML=open('sectorDB_STG/'+sector+'/sector_'+sector+'_Uncalibration_STG_'+location+'.xml',"w+")
+   fileXML=open('sector_'+sector+'_Uncalibration_STG_'+location+'.xml',"w+")
 
 if(args['mode']=="S"):
-   fileXML=open('sectorDB_STG/'+sector+'/sector_'+sector+'_Simulation_STG_'+location+'.xml',"w+")
+   fileXML=open('sector_'+sector+'_Simulation_STG_'+location+'.xml',"w+")
 
 
 elinksFile = open('sectorDB_STG/'+sector+'/boards_elink_'+sector+'_'+location+'.txt','r')
@@ -138,12 +138,12 @@ fileXML.write("""<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE configuration [
 <!ENTITY SCA_SFEB SYSTEM "SCA_SFEB.xml">
 <!ENTITY SCA_PFEB SYSTEM "SCA_PFEB.xml">
-<!ENTITY SCA_L1DDC SYSTEM "SCA_L1DDC.xml">
+<!ENTITY SCA_L1DDC SYSTEM "SCA_L1DDC_STG.xml">
 <!ENTITY SCA_PADTRIGGER SYSTEM "SCA_PADTRIGGER.xml">
 <!ENTITY SCA_ROUTER SYSTEM "SCA_ROUTER.xml">
 <!ENTITY SCA_RIML1DDC1 SYSTEM "SCA_RIML1DDC1.xml">
 <!ENTITY SCA_RIML1DDC2 SYSTEM "SCA_RIML1DDC2.xml">
-
+<!ENTITY formulaList SYSTEM "formulaList.xml">
 ]>
 <configuration xmlns="http://cern.ch/quasar/Configuration" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://cern.ch/quasar/Configuration Configuration.xsd ">
     <StandardMetaData>
@@ -152,21 +152,8 @@ fileXML.write("""<?xml version="1.0" encoding="UTF-8"?>
         </Log>
     <SourceVariableThreadPool minThreads="0" maxThreads="100" maxJobs="10000"/>
     </StandardMetaData>
-    <CalculatedVariableGenericFormula name="scaTemperature" formula="(0.79-$thisObjectAddress.value)*545.454545455-40"/>
-    <CalculatedVariableGenericFormula name="vmmTemperature" formula="(725.0-(1000.0*$thisObjectAddress.value))/1.85"/>
-    <CalculatedVariableGenericFormula name="rssiCurrentmA" formula="2.5-$thisObjectAddress.value"/>
-    <CalculatedVariableGenericFormula name="thermistorTemperature" formula="1/( 3.3540154*10^(-3)+(2.5627725*10^(-4)*log(1000*$thisObjectAddress.value/500))+(2.0829210*10^(-6)*(log(1000*$thisObjectAddress.value/500))^2)+(7.3003206*10^(-8)*(log(1000*$thisObjectAddress.value/500))^3)) -273.15"/>
-    <CalculatedVariableGenericFormula name="feastTemperature_1V5" formula="($thisObjectAddress.value*1000-$parentObjectAddress(numLevelsUp=2).constant_1V5 )/8.43+25.0"/>
-    <CalculatedVariableGenericFormula name="feastTemperature_2V5" formula="($thisObjectAddress.value*1000-$parentObjectAddress(numLevelsUp=2).constant_2V5 )/8.43+25.0"/>
 
-    <CalculatedVariableGenericFormula name="feastTemperature_VccInt" formula="($thisObjectAddress.value*1000-$parentObjectAddress(numLevelsUp=2).constant_feastVccIntTemp )/8.43+25.0"/>
-    <CalculatedVariableGenericFormula name="feastTemperature_MgtVcc" formula="($thisObjectAddress.value*1000-$parentObjectAddress(numLevelsUp=2).constant_feastMgtVccTemp )/8.43+25.0"/>
-    <CalculatedVariableGenericFormula name="feastTemperature_AuxTemp" formula="($thisObjectAddress.value*1000-$parentObjectAddress(numLevelsUp=2).constant_feastAuxTemp )/8.43+25.0"/>
-    <CalculatedVariableGenericFormula name="feastTemperature_MgtVtt" formula="($thisObjectAddress.value*1000-$parentObjectAddress(numLevelsUp=2).constant_feastMgtVttTemp )/8.43+25.0"/>
-    <CalculatedVariableGenericFormula name="feastTemperature_Vcc2V5" formula="($thisObjectAddress.value*1000-$parentObjectAddress(numLevelsUp=2).constant_feastVcc2V5Temp )/8.43+25.0"/>
-    <CalculatedVariableGenericFormula name="feastTemperature_Vcc3V3" formula="($thisObjectAddress.value*1000-$parentObjectAddress(numLevelsUp=2).constant_feastVcc3V3Temp )/8.43+25.0"/>
-    <CalculatedVariableGenericFormula name="feastTemperature_Vcc1V5" formula="($thisObjectAddress.value*1000-$parentObjectAddress(numLevelsUp=2).constant_feastVcc1V5Temp )/8.43+25.0"/>
-
+    &formulaList;
 
     """)
 
@@ -203,9 +190,9 @@ for board,elink in zip(boards,elinks):
 	  if(re.compile("L1DDC").match(board)):
 	    l1ddccounter=l1ddccounter+1	
 	    if(args['mode']=="U"):
-	      fileXML.write(templateL1DDC_RIML1DDC1_RIML1DDC2_Uncalibrated() % (opcHost,felixDeviceId,felixDeviceId,elink,board,"L1DDC"))
+	      fileXML.write(templateL1DDC_RIML1DDC1_RIML1DDC2_Uncalibrated() % (opcHost,felixDeviceId,felixDeviceId,elink,board,"L1DDC_STG"))
 	    if(args['mode']=="S"):
-	      fileXML.write(templateL1DDC_RIML1DDC1_RIML1DDC2_Simulation() % (counter,board,"L1DDC"))	
+	      fileXML.write(templateL1DDC_RIML1DDC1_RIML1DDC2_Simulation() % (counter,board,"L1DDC_STG"))	
     if(args['RIML1DDC1']==True):
 	  if(re.compile("RIML1DDC1").match(board)):
 	    riml1ddc1counter=riml1ddc1counter+1	
@@ -230,7 +217,7 @@ for board,elink in zip(boards,elinks):
 
 
 fileXML.write("""
-    <AdcSampler name="adcSamplerMechanism" maxNumberThreads="8" />
+   <!-- <AdcSampler name="adcSamplerMechanism" maxNumberThreads="8" /> -->
 
 	</configuration>""")
 
@@ -255,11 +242,13 @@ fileXML.close()
 
 fileSCA_SFEB=open("SCA_SFEB.xml","w+")
 fileSCA_PFEB=open("SCA_PFEB.xml","w+")
-fileSCA_L1DDC=open("SCA_L1DDC.xml","w+")
+fileSCA_L1DDC=open("SCA_L1DDC_STG.xml","w+")
 fileSCA_PADTRIGGER=open("SCA_PADTRIGGER.xml","w+")
 fileSCA_ROUTER=open("SCA_ROUTER.xml","w+")
 fileRIML1DDC1=open("SCA_RIML1DDC1.xml","w+")
 fileRIML1DDC2=open("SCA_RIML1DDC2.xml","w+")
+file_formulaList=open("formulaList.xml","w+")
+
 
 fileSCA_SFEB.write("""
 	        <AnalogInputSystem name="ai" generalRefreshRate="5">
@@ -920,6 +909,25 @@ fileRIML1DDC2.write("""
 		</DigitalIOSystem>	
 		""")
 
+file_formulaList.write("""
+    <CalculatedVariableGenericFormula name="vmmTemperature" formula="(725.0-(1.5*1000.0*$thisObjectAddress.value))/1.85"/>
+    <CalculatedVariableGenericFormula name="thermistorTemperature" formula="1/( 3.3540154*10^(-3)+(2.5627725*10^(-4)*log(1000*$thisObjectAddress.value/500))+(2.0829210*10^(-6)*(log(1000*$thisObjectAddress.value/500))^2)+(7.3003206*10^(-8)*(log(1000*$thisObjectAddress.value/500))^3)) -273.15"/>
+    <CalculatedVariableGenericFormula name="scaTemperature" formula="(0.79-$thisObjectAddress.value)*545.454545455-40"/>
+    <CalculatedVariableGenericFormula name="feastTemperature_1V3E" formula="($thisObjectAddress.value*1000-$parentObjectAddress(numLevelsUp=2).constant_1V3E )/8.43+25.0"/>
+    <CalculatedVariableGenericFormula name="feastTemperature_1V2D" formula="($thisObjectAddress.value*1000-$parentObjectAddress(numLevelsUp=2).constant_1V2D )/8.43+25.0"/>
+    <CalculatedVariableGenericFormula name="feastTemperature_1V3" formula="($thisObjectAddress.value*1000-$parentObjectAddress(numLevelsUp=2).constant_1V3 )/8.43+25.0"/>
+    <CalculatedVariableGenericFormula name="feastTemperature_1V5" formula="($thisObjectAddress.value*1000-$parentObjectAddress(numLevelsUp=2).constant_1V5 )/8.43+25.0"/>
+    <CalculatedVariableGenericFormula name="feastTemperature_2V5" formula="($thisObjectAddress.value*1000-$parentObjectAddress(numLevelsUp=2).constant_2V5 )/8.43+25.0"/>
+    <CalculatedVariableGenericFormula name="feastTemperature_VccInt" formula="($thisObjectAddress.value*1000-$parentObjectAddress(numLevelsUp=2).constant_feastVccIntTemp )/8.43+25.0"/>
+    <CalculatedVariableGenericFormula name="feastTemperature_MgtVcc" formula="($thisObjectAddress.value*1000-$parentObjectAddress(numLevelsUp=2).constant_feastMgtVccTemp )/8.43+25.0"/>
+    <CalculatedVariableGenericFormula name="feastTemperature_AuxTemp" formula="($thisObjectAddress.value*1000-$parentObjectAddress(numLevelsUp=2).constant_feastAuxTemp )/8.43+25.0"/>
+    <CalculatedVariableGenericFormula name="feastTemperature_MgtVtt" formula="($thisObjectAddress.value*1000-$parentObjectAddress(numLevelsUp=2).constant_feastMgtVttTemp )/8.43+25.0"/>
+    <CalculatedVariableGenericFormula name="feastTemperature_Vcc2V5" formula="($thisObjectAddress.value*1000-$parentObjectAddress(numLevelsUp=2).constant_feastVcc2V5Temp )/8.43+25.0"/>
+    <CalculatedVariableGenericFormula name="feastTemperature_Vcc3V3" formula="($thisObjectAddress.value*1000-$parentObjectAddress(numLevelsUp=2).constant_feastVcc3V3Temp )/8.43+25.0"/>
+    <CalculatedVariableGenericFormula name="feastTemperature_Vcc1V5" formula="($thisObjectAddress.value*1000-$parentObjectAddress(numLevelsUp=2).constant_feastVcc1V5Temp )/8.43+25.0"/>
+    <CalculatedVariableGenericFormula name="rssiCurrentmA" formula="2.5-$thisObjectAddress.value"/>
+	""")
+
 fileSCA_SFEB.close()
 fileSCA_PFEB.close()
 fileSCA_L1DDC.close()
@@ -927,3 +935,4 @@ fileSCA_PADTRIGGER.close()
 fileSCA_ROUTER.close()
 fileRIML1DDC1.close()
 fileRIML1DDC2.close()
+file_formulaList.close()
