@@ -9,6 +9,7 @@
 # Date 2/12/2019 :  Board/Elink per sector
 # Date 6/12/2019 :  Add location argument e.g BB5/191/180
 #					Arguments error handling
+# Date 18/02/2020 : Add formula list
 ###################################################################################
 
 # ----------------------  SCA templates -------------------------------------------------------
