@@ -87,6 +87,8 @@ parser.add_argument("-l", "--L1DDC", action='store_true',
    help="Enable L1DDC")
 parser.add_argument("-a", "--ADDC", action='store_true',
    help="Enable ADDC")
+parser.add_argument("-afs", "--AFS", action='store_true',
+   help="Use AFS SCA/Formulas Entities, if not use will create locally")
 args = vars(parser.parse_args())
 
 # ----------------------  Function arguments error handling -------------------------------------------------------
@@ -171,24 +173,45 @@ for line in linesOfElinksFile:
    elinks.append(line.split()[1])
 elinksFile.close()
 
-fileXML.write("""<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE configuration [
-<!ENTITY SCA_L1DDC SYSTEM "SCA_L1DDC.xml">
-<!ENTITY SCA_ADDC SYSTEM "SCA_ADDC.xml">
-<!ENTITY SCA_MMFE8 SYSTEM "SCA_MMFE8.xml">
-<!ENTITY formulaList SYSTEM "formulaList.xml">
-]>
-<configuration xmlns="http://cern.ch/quasar/Configuration" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://cern.ch/quasar/Configuration Configuration.xsd ">
-    <StandardMetaData>
-        <Log>
-            <GeneralLogLevel logLevel="INF"/>
-        </Log>
-    <SourceVariableThreadPool minThreads="0" maxThreads="100" maxJobs="10000"/>
-    </StandardMetaData>
+if(args['AFS']==True):
+	fileXML.write("""<?xml version="1.0" encoding="UTF-8"?>
+	<!DOCTYPE configuration [
+	<!ENTITY SCA_L1DDC SYSTEM "/afs/cern.ch/user/n/nswdaq/public/sw/config-ttc/config-files/opc_xml/scripts/SCA_L1DDC.xml">
+	<!ENTITY SCA_ADDC SYSTEM "/afs/cern.ch/user/n/nswdaq/public/sw/config-ttc/config-files/opc_xml/scripts/SCA_ADDC.xml">
+	<!ENTITY SCA_MMFE8 SYSTEM "/afs/cern.ch/user/n/nswdaq/public/sw/config-ttc/config-files/opc_xml/scripts/SCA_MMFE8.xml">
+	<!ENTITY formulaList SYSTEM "/afs/cern.ch/user/n/nswdaq/public/sw/config-ttc/config-files/opc_xml/scripts/formulaList.xml">
+	]>
+	<configuration xmlns="http://cern.ch/quasar/Configuration" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://cern.ch/quasar/Configuration /opt/OpcUaScaServer/bin/Configuration.xsd ">
+   	 <StandardMetaData>
+     	   <Log>
+     	       <GeneralLogLevel logLevel="INF"/>
+     	   </Log>
+    	<SourceVariableThreadPool minThreads="0" maxThreads="100" maxJobs="10000"/>
+   	 </StandardMetaData>
 
-    &formulaList;
+   	 &formulaList;
 
-    """)
+   	 """)
+else:
+	fileXML.write("""<?xml version="1.0" encoding="UTF-8"?>
+	<!DOCTYPE configuration [
+	<!ENTITY SCA_L1DDC SYSTEM "SCA_L1DDC.xml">
+	<!ENTITY SCA_ADDC SYSTEM "SCA_ADDC.xml">
+	<!ENTITY SCA_MMFE8 SYSTEM "SCA_MMFE8.xml">
+	<!ENTITY formulaList SYSTEM "formulaList.xml">
+	]>
+	<configuration xmlns="http://cern.ch/quasar/Configuration" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://cern.ch/quasar/Configuration /opt/OpcUaScaServer/bin/Configuration.xsd ">
+   	 <StandardMetaData>
+     	   <Log>
+     	       <GeneralLogLevel logLevel="INF"/>
+     	   </Log>
+    	<SourceVariableThreadPool minThreads="0" maxThreads="100" maxJobs="10000"/>
+   	 </StandardMetaData>
+
+   	 &formulaList;
+
+   	 """)
+
 
 
 mmmfe8Counter=addcCounter=l1ddcCounter=0
@@ -243,7 +266,7 @@ print("		Number of ADDC boards: "+str(addcCounter))
 print("********************************************************")
 print("*******        XML produced !!!!             ***********")
 print("********************************************************")
-
+print("")
 
 fileXML.close()
 
@@ -251,14 +274,15 @@ fileXML.close()
 
 # ----------------------  Create SCA XML Entities -------------------------------------------------------
 
-fileSCA_MMFE8=open("SCA_MMFE8.xml","w+")
-fileSCA_L1DDC=open("SCA_L1DDC.xml","w+")
-fileSCA_ADDC=open("SCA_ADDC.xml","w+")
-file_formulaList=open("formulaList.xml","w+")
+if(args['AFS']==False):
+	fileSCA_MMFE8=open("SCA_MMFE8.xml","w+")
+	fileSCA_L1DDC=open("SCA_L1DDC.xml","w+")
+	fileSCA_ADDC=open("SCA_ADDC.xml","w+")
+	file_formulaList=open("formulaList.xml","w+")
 
 
 
-fileSCA_MMFE8.write("""
+	fileSCA_MMFE8.write("""
     <AnalogInputSystem generalRefreshRate="5" name="ai">
       <AnalogInput id="1" name="vmmPdo0">    <CalculatedVariable name="temperature" value="$applyGenericFormula(vmmTemperature)"  />  </AnalogInput>
       <AnalogInput id="2" name="vmmPdo1">    <CalculatedVariable name="temperature" value="$applyGenericFormula(vmmTemperature)"  />  </AnalogInput>
@@ -428,7 +452,7 @@ fileSCA_MMFE8.write("""
     </I2cMaster>
 	""")
 
-fileSCA_L1DDC.write("""
+	fileSCA_L1DDC.write("""
     <AnalogInputSystem generalRefreshRate="5" name="ai">
       <AnalogInput id="0" name="GBTX1_TEMP" enableCurrentSource="true" > <CalculatedVariable name="temperature" value="$applyGenericFormula(thermistorTemperature)" /> </AnalogInput>
       <AnalogInput id="1" name="GBTX2_TEMP" enableCurrentSource="true" > <CalculatedVariable name="temperature" value="$applyGenericFormula(thermistorTemperature)" /> </AnalogInput>
@@ -449,7 +473,7 @@ fileSCA_L1DDC.write("""
 	""")
 
 
-fileSCA_ADDC.write("""
+	fileSCA_ADDC.write("""
 	<AnalogInputSystem name="ai" generalRefreshRate="5">
 	<AnalogInput id="0" name="1v5TP0"> <CalculatedVariable name="power" value="$thisObjectAddress.value*2.0" /> </AnalogInput>
 	<AnalogInput id="1" name="1v5TP1"> <CalculatedVariable name="power" value="$thisObjectAddress.value*2.0" /> </AnalogInput>
@@ -506,7 +530,7 @@ fileSCA_ADDC.write("""
 	""")
 
 
-file_formulaList.write("""
+	file_formulaList.write("""
     <CalculatedVariableGenericFormula name="vmmTemperature" formula="(725.0-(1.5*1000.0*$thisObjectAddress.value))/1.85"/>
     <CalculatedVariableGenericFormula name="thermistorTemperature" formula="1/( 3.3540154*10^(-3)+(2.5627725*10^(-4)*log(1000*$thisObjectAddress.value/500))+(2.0829210*10^(-6)*(log(1000*$thisObjectAddress.value/500))^2)+(7.3003206*10^(-8)*(log(1000*$thisObjectAddress.value/500))^3)) -273.15"/>
     <CalculatedVariableGenericFormula name="scaTemperature" formula="(0.79-$thisObjectAddress.value)*545.454545455-40"/>
@@ -525,7 +549,11 @@ file_formulaList.write("""
     <CalculatedVariableGenericFormula name="rssiCurrentmA" formula="2.5-$thisObjectAddress.value"/>
 	""")
 
-fileSCA_MMFE8.close()
-fileSCA_L1DDC.close()
-fileSCA_ADDC.close()
-file_formulaList.close()
+	fileSCA_MMFE8.close()
+	print("*******        SCA_MMFE8.xml created locally ")
+	fileSCA_L1DDC.close()
+	print("*******        SCA_L1DDC.xml created locally ")
+	fileSCA_ADDC.close()
+	print("*******        SCA_ADDC.xml created locally ")
+	file_formulaList.close()
+	print("*******        formulaList.xml created locally ")

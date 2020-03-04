@@ -90,6 +90,8 @@ parser.add_argument("-r", "--ROUTER", action='store_true',
    help="Enable ROUTER")
 parser.add_argument("-pad", "--PADTRIGGER", action='store_true',
    help="Enable PAD TRIGGER")
+parser.add_argument("-afs", "--AFS", action='store_true',
+   help="Use AFS SCA/Formulas Entities, if not use will create locally")
 args = vars(parser.parse_args())	
 
 # ----------------------  Function arguments error handling -------------------------------------------------------
@@ -135,28 +137,53 @@ for line in linesOfElinksFile:
    elinks.append(line.split()[1])
 elinksFile.close()
 
-fileXML.write("""<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE configuration [
-<!ENTITY SCA_SFEB SYSTEM "SCA_SFEB.xml">
-<!ENTITY SCA_PFEB SYSTEM "SCA_PFEB.xml">
-<!ENTITY SCA_L1DDC SYSTEM "SCA_L1DDC_STG.xml">
-<!ENTITY SCA_PADTRIGGER SYSTEM "SCA_PADTRIGGER.xml">
-<!ENTITY SCA_ROUTER SYSTEM "SCA_ROUTER.xml">
-<!ENTITY SCA_RIML1DDC1 SYSTEM "SCA_RIML1DDC1.xml">
-<!ENTITY SCA_RIML1DDC2 SYSTEM "SCA_RIML1DDC2.xml">
-<!ENTITY formulaList SYSTEM "formulaList.xml">
-]>
-<configuration xmlns="http://cern.ch/quasar/Configuration" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://cern.ch/quasar/Configuration Configuration.xsd ">
-    <StandardMetaData>
-        <Log>
-            <GeneralLogLevel logLevel="INF"/>
-        </Log>
-    <SourceVariableThreadPool minThreads="0" maxThreads="100" maxJobs="10000"/>
-    </StandardMetaData>
+if(args['AFS']==True):
+	fileXML.write("""<?xml version="1.0" encoding="UTF-8"?>
+	<!DOCTYPE configuration [
+	<!ENTITY SCA_SFEB SYSTEM "/afs/cern.ch/user/n/nswdaq/public/sw/config-ttc/config-files/opc_xml/scripts/SCA_SFEB.xml">
+	<!ENTITY SCA_PFEB SYSTEM "/afs/cern.ch/user/n/nswdaq/public/sw/config-ttc/config-files/opc_xml/scripts/SCA_PFEB.xml">
+	<!ENTITY SCA_L1DDC SYSTEM "/afs/cern.ch/user/n/nswdaq/public/sw/config-ttc/config-files/opc_xml/scripts/SCA_L1DDC_STG.xml">
+	<!ENTITY SCA_PADTRIGGER SYSTEM "/afs/cern.ch/user/n/nswdaq/public/sw/config-ttc/config-files/opc_xml/scripts/SCA_PADTRIGGER.xml">
+	<!ENTITY SCA_ROUTER SYSTEM "/afs/cern.ch/user/n/nswdaq/public/sw/config-ttc/config-files/opc_xml/scripts/SCA_ROUTER.xml">
+	<!ENTITY SCA_RIML1DDC1 SYSTEM "/afs/cern.ch/user/n/nswdaq/public/sw/config-ttc/config-files/opc_xml/scripts/SCA_RIML1DDC1.xml">
+	<!ENTITY SCA_RIML1DDC2 SYSTEM "/afs/cern.ch/user/n/nswdaq/public/sw/config-ttc/config-files/opc_xml/scripts/SCA_RIML1DDC2.xml">
+	<!ENTITY formulaList SYSTEM "/afs/cern.ch/user/n/nswdaq/public/sw/config-ttc/config-files/opc_xml/scripts/formulaList.xml">
+	]>
+	<configuration xmlns="http://cern.ch/quasar/Configuration" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://cern.ch/quasar/Configuration /opt/OpcUaScaServer/bin/Configuration.xsd ">
+ 	   <StandardMetaData>
+  	      <Log>
+   	         <GeneralLogLevel logLevel="INF"/>
+    	    </Log>
+   	 <SourceVariableThreadPool minThreads="0" maxThreads="100" maxJobs="10000"/>
+    	</StandardMetaData>
 
-    &formulaList;
+   	 &formulaList;
 
-    """)
+   	 """)
+else:
+	fileXML.write("""<?xml version="1.0" encoding="UTF-8"?>
+	<!DOCTYPE configuration [
+	<!ENTITY SCA_SFEB SYSTEM "SCA_SFEB.xml">
+	<!ENTITY SCA_PFEB SYSTEM "SCA_PFEB.xml">
+	<!ENTITY SCA_L1DDC SYSTEM "SCA_L1DDC_STG.xml">
+	<!ENTITY SCA_PADTRIGGER SYSTEM "SCA_PADTRIGGER.xml">
+	<!ENTITY SCA_ROUTER SYSTEM "SCA_ROUTER.xml">
+	<!ENTITY SCA_RIML1DDC1 SYSTEM "SCA_RIML1DDC1.xml">
+	<!ENTITY SCA_RIML1DDC2 SYSTEM "SCA_RIML1DDC2.xml">
+	<!ENTITY formulaList SYSTEM "formulaList.xml">
+	]>
+	<configuration xmlns="http://cern.ch/quasar/Configuration" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://cern.ch/quasar/Configuration Configuration.xsd ">
+ 	   <StandardMetaData>
+  	      <Log>
+   	         <GeneralLogLevel logLevel="INF"/>
+    	    </Log>
+   	 <SourceVariableThreadPool minThreads="0" maxThreads="100" maxJobs="10000"/>
+    	</StandardMetaData>
+
+   	 &formulaList;
+
+   	 """)
+
 
 sfebcounter=pfebcounter=l1ddccounter=riml1ddc1counter=riml1ddc2counter=padtriggercounter=routercounter=0
 counter=0
@@ -241,17 +268,18 @@ fileXML.close()
 
 # ----------------------  Create SCA XML Entities -------------------------------------------------------
 
-fileSCA_SFEB=open("SCA_SFEB.xml","w+")
-fileSCA_PFEB=open("SCA_PFEB.xml","w+")
-fileSCA_L1DDC=open("SCA_L1DDC_STG.xml","w+")
-fileSCA_PADTRIGGER=open("SCA_PADTRIGGER.xml","w+")
-fileSCA_ROUTER=open("SCA_ROUTER.xml","w+")
-fileRIML1DDC1=open("SCA_RIML1DDC1.xml","w+")
-fileRIML1DDC2=open("SCA_RIML1DDC2.xml","w+")
-file_formulaList=open("formulaList.xml","w+")
+if(args['AFS']==False):
+	fileSCA_SFEB=open("SCA_SFEB.xml","w+")
+	fileSCA_PFEB=open("SCA_PFEB.xml","w+")
+	fileSCA_L1DDC=open("SCA_L1DDC_STG.xml","w+")
+	fileSCA_PADTRIGGER=open("SCA_PADTRIGGER.xml","w+")
+	fileSCA_ROUTER=open("SCA_ROUTER.xml","w+")
+	fileRIML1DDC1=open("SCA_RIML1DDC1.xml","w+")
+	fileRIML1DDC2=open("SCA_RIML1DDC2.xml","w+")
+	file_formulaList=open("formulaList.xml","w+")
 
 
-fileSCA_SFEB.write("""
+	fileSCA_SFEB.write("""
 	        <AnalogInputSystem name="ai" generalRefreshRate="5">
             <AnalogInput name="vmmPdo0" id="0">   <CalculatedVariable name="temperature" value="$applyGenericFormula(vmmTemperature)"  />  </AnalogInput>
             <AnalogInput name="vmmPdo1" id="1">   <CalculatedVariable name="temperature" value="$applyGenericFormula(vmmTemperature)"  />  </AnalogInput>
@@ -520,7 +548,7 @@ fileSCA_SFEB.write("""
         </I2cMaster>
 	""")
 
-fileSCA_PFEB.write("""
+	fileSCA_PFEB.write("""
         <AnalogInputSystem name="ai" generalRefreshRate="5">
             <AnalogInput name="vmmPdo0" id="0">   <CalculatedVariable name="temperature" value="$applyGenericFormula(vmmTemperature)"  />  </AnalogInput>
             <AnalogInput name="vmmPdo1" id="1">   <CalculatedVariable name="temperature" value="$applyGenericFormula(vmmTemperature)"  />  </AnalogInput>
@@ -698,7 +726,7 @@ fileSCA_PFEB.write("""
         </I2cMaster>	
 	""")
 
-fileSCA_L1DDC.write("""
+	fileSCA_L1DDC.write("""
 		<AnalogInputSystem name="ai" generalRefreshRate="5">
            <AnalogInput id="0" name="GBTX1_TEMP" enableCurrentSource="true" > <CalculatedVariable name="temperature" value="$applyGenericFormula(thermistorTemperature)" /> </AnalogInput>
            <AnalogInput id="1" name="GBTX2_TEMP" enableCurrentSource="true" > <CalculatedVariable name="temperature" value="$applyGenericFormula(thermistorTemperature)" /> </AnalogInput>
@@ -718,7 +746,7 @@ fileSCA_L1DDC.write("""
 		</I2cMaster>	
 		""")
 
-fileSCA_PADTRIGGER.write("""
+	fileSCA_PADTRIGGER.write("""
 		<AnalogInputSystem name="ai" generalRefreshRate="5">
 			<AnalogInput name="P2V5_2" id= "20"> <CalculatedVariable name="power" value="$thisObjectAddress.value*1.0" />	 </AnalogInput>
 			<AnalogInput name="P1V8A" id= "21"> <CalculatedVariable name="power" value="$thisObjectAddress.value*1.0" />	 </AnalogInput>
@@ -785,7 +813,7 @@ fileSCA_PADTRIGGER.write("""
          </JtagSystem>	
 		""")
 
-fileSCA_ROUTER.write("""
+	fileSCA_ROUTER.write("""
 		<AnalogInputSystem name="ai" generalRefreshRate="5">
 			<AnalogInput name="VCC5VA" id="0"> <CalculatedVariable name="power" value="$thisObjectAddress.value*10.0/11.0" />	 </AnalogInput>
 			<AnalogInput name="VCC5V" id="1"> <CalculatedVariable name="power" value="$thisObjectAddress.value*10.0/11.0" /> </AnalogInput>
@@ -859,7 +887,7 @@ fileSCA_ROUTER.write("""
         </I2cMaster>	
 		""")
 
-fileRIML1DDC1.write("""
+	fileRIML1DDC1.write("""
 		<AnalogInputSystem name="ai" generalRefreshRate="0">
 			<AnalogInput name="GBTX1_TEMP" id="0" enableCurrentSource="true" >  <CalculatedVariable name="temperature" value="$applyGenericFormula(thermistorTemperature)" /> </AnalogInput>
 			<AnalogInput name="1V5_PTAT1" id="3">                               <CalculatedVariable name="temperature" value="$applyGenericFormula(feastTemperature_1V5)" />  </AnalogInput>
@@ -891,7 +919,7 @@ fileRIML1DDC1.write("""
 		</DigitalIOSystem>	
 		""")
 
-fileRIML1DDC2.write("""
+	fileRIML1DDC2.write("""
 		<AnalogInputSystem name="ai" generalRefreshRate="0">
 			<AnalogInput name="GBTX2_TEMP" id="0" enableCurrentSource="true" >  <CalculatedVariable name="temperature" value="$applyGenericFormula(thermistorTemperature)" /> </AnalogInput>
 			<AnalogInput name="1V5_PTAT2" id="3">                               <CalculatedVariable name="temperature" value="$applyGenericFormula(feastTemperature_1V5)" />  </AnalogInput>
@@ -923,7 +951,7 @@ fileRIML1DDC2.write("""
 		</DigitalIOSystem>	
 		""")
 
-file_formulaList.write("""
+	file_formulaList.write("""
     <CalculatedVariableGenericFormula name="vmmTemperature" formula="(725.0-(1.5*1000.0*$thisObjectAddress.value))/1.85"/>
     <CalculatedVariableGenericFormula name="thermistorTemperature" formula="1/( 3.3540154*10^(-3)+(2.5627725*10^(-4)*log(1000*$thisObjectAddress.value/500))+(2.0829210*10^(-6)*(log(1000*$thisObjectAddress.value/500))^2)+(7.3003206*10^(-8)*(log(1000*$thisObjectAddress.value/500))^3)) -273.15"/>
     <CalculatedVariableGenericFormula name="scaTemperature" formula="(0.79-$thisObjectAddress.value)*545.454545455-40"/>
@@ -942,11 +970,19 @@ file_formulaList.write("""
     <CalculatedVariableGenericFormula name="rssiCurrentmA" formula="2.5-$thisObjectAddress.value"/>
 	""")
 
-fileSCA_SFEB.close()
-fileSCA_PFEB.close()
-fileSCA_L1DDC.close()
-fileSCA_PADTRIGGER.close()
-fileSCA_ROUTER.close()
-fileRIML1DDC1.close()
-fileRIML1DDC2.close()
-file_formulaList.close()
+	fileSCA_SFEB.close()
+	print("*******        SCA_SFEB.xml created locally ")
+	fileSCA_PFEB.close()
+	print("*******        SCA_PFEB.xml created locally ")
+	fileSCA_L1DDC.close()
+	print("*******        SCA_L1DDC_STG.xml created locally ")
+	fileSCA_PADTRIGGER.close()
+	print("*******        SCA_PADTRIGGER.xml created locally ")
+	fileSCA_ROUTER.close()
+	print("*******        SCA_ROUTER.xml created locally ")
+	fileRIML1DDC1.close()
+	print("*******        SCA_RIML1DDC1.xml created locally ")
+	fileRIML1DDC2.close()
+	print("*******        SCA_RIML1DDC2.xml created locally ")
+	file_formulaList.close()
+	print("*******        formulaList.xml created locally ")
