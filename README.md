@@ -36,3 +36,8 @@ Enable Boards:
 ```
 source calibrateFEAST_MMG.sh AXX
 ```
+## Contact
+
+Questions, comments, suggestions, or help?
+
+**Polyneikis Tzanis**: <polyneikis.tzanis@cern.ch
