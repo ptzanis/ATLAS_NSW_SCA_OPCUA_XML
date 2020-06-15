@@ -62,7 +62,7 @@ for i,board in enumerate(boardListFile):
       scaTemp = float(str(internalTemperature.targets[0].data))
       l1ddcFile.write("%s %4.7f %4.7f \n" % (boardName,feast1V5ValueL1DDC*1000.0-8.43*(scaTemp-25.0),feast2V5ValueL1DDC*1000.0-8.43*(scaTemp-25.0))); 
     sys.stdout.write('\r')
-    sys.stdout.write("[%-160s] %d%%" % ('='*i, 101*i/160))
+    sys.stdout.write("[%-100s] %d%%" % ('='*int(101*i/160), 101*i/160))
     sys.stdout.flush()
     time.sleep(0.01)
 
