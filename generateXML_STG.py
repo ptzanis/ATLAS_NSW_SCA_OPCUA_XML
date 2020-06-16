@@ -142,7 +142,7 @@ if(args['AFS']==True):
 	<!DOCTYPE configuration [
 	<!ENTITY SCA_SFEB SYSTEM "/afs/cern.ch/user/n/nswdaq/public/sw/config-ttc/config-files/opc_xml/scripts/SCA_SFEB.xml">
 	<!ENTITY SCA_PFEB SYSTEM "/afs/cern.ch/user/n/nswdaq/public/sw/config-ttc/config-files/opc_xml/scripts/SCA_PFEB.xml">
-	<!ENTITY SCA_L1DDC SYSTEM "/afs/cern.ch/user/n/nswdaq/public/sw/config-ttc/config-files/opc_xml/scripts/SCA_L1DDC_STG.xml">
+	<!ENTITY SCA_L1DDC_STG SYSTEM "/afs/cern.ch/user/n/nswdaq/public/sw/config-ttc/config-files/opc_xml/scripts/SCA_L1DDC_STG.xml">
 	<!ENTITY SCA_PADTRIGGER SYSTEM "/afs/cern.ch/user/n/nswdaq/public/sw/config-ttc/config-files/opc_xml/scripts/SCA_PADTRIGGER.xml">
 	<!ENTITY SCA_ROUTER SYSTEM "/afs/cern.ch/user/n/nswdaq/public/sw/config-ttc/config-files/opc_xml/scripts/SCA_ROUTER.xml">
 	<!ENTITY SCA_RIML1DDC1 SYSTEM "/afs/cern.ch/user/n/nswdaq/public/sw/config-ttc/config-files/opc_xml/scripts/SCA_RIML1DDC1.xml">
